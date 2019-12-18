@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/plugins/layui/layui.css'>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src='/plugins/layui/layui.all.js' charset="utf-8"></script>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">主页</li>
+    <li>新增</li>
+  </ul>
+  <div class="layui-tab-content" style="height: 100px;">
+    <div class="layui-tab-item layui-show">
+      <table id="list"></table>
+    </div>
+
+    <div class="layui-tab-item">
+      <form class="layui-form" action="">
+        <div class="layui-form-item">
+          <label class="layui-form-label">标题</label>
+          <div class="layui-input-block">
+            <input type="text" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+          <label class="layui-form-label">文本域</label>
+          <div class="layui-input-block">
+            <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+          </div>
+        </div>
+        <div class="layui-form-item">
+          <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  layui.use('table', function(){
+    var table = layui.table;
+
+    //第一个实例
+    table.render({
+      elem: '#list',
+      // height: 312,
+      // url: '/demo/table/user/', //数据接口,
+      page: true, //开启分页
+      cols: [[ //表头
+        {field: 'id', title: 'ID'},
+        {field: 'title', title: '标题'},
+        {field: 'content', title: '内容'},
+        {field: 'createTime', title: '创建时间', sort: true},
+      ]]
+    });
+  });
+</script>
+</body>
+</html>

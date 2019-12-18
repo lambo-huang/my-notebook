@@ -1,0 +1,1 @@
+SET DEBUG=my-notebook:* & npm start
