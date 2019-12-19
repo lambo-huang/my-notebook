@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 // 生成一个express实例 app
 var app = express();
@@ -14,6 +13,12 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 // 设置视图模板引擎为 ejs
 app.set('view engine', 'ejs');
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // app.use(favicon(__dirname + '/public/favicon.ico’)); // 设置/public/favicon.ico为favicon图标。
 
@@ -25,7 +30,6 @@ app.use(express.static(path.join(__dirname, 'public'))); // 设置public文件夹为存
 
 // 路由控制器
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // 捕获404错误，并转发到错误处理器。
 app.use(function(req, res, next) {

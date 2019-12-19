@@ -2,6 +2,17 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.main {
+  padding: 20px;
+}
+
+.filter-box {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+}
+
+.filter-box input {
+  width: 300px;
+  margin-right: 10px;
 }

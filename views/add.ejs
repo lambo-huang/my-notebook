@@ -1,11 +1,77 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title>新增 / 编辑</title>
 </head>
 <body>
-<h1><%= title %></h1>
-<p>Welcome to <%= title %></p>
+<%- include header %>
+<div class="main">
+    <input type="hidden" value="<% id %>">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">标题</label>
+            <div class="layui-input-block">
+                <input type="text"
+                       name="title" required
+                       lay-verify="required"
+                       placeholder="请输入标题"
+                       autocomplete="off"
+                       class="layui-input"
+                       id="title"
+                       value="<% title %>"
+                >
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">文本域</label>
+            <div class="layui-input-block">
+              <textarea
+                      id="content"
+                      name="desc" required
+                      lay-verify="required"
+                      placeholder="请输入内容"
+                      class="layui-textarea"
+                      value="<% title %>>"
+              ></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" id="add">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  $("#add").click(function () {
+    const param = {
+      title: $("#title").val(),
+      content: $("#content").val(),
+      createTime: getTime()
+    };
+    $.post("/addInfo", param, function (res) {
+      if (!res.code) {
+        layer.msg('新增成功。');
+        $("#title").val('');
+        $("#content").val('')
+      } else {
+        layer.msg('新增失败。');
+      }
+    })
+  })
+
+
+  function getTime(){
+    const datetime = new Date();
+    const year = datetime.getFullYear();
+    const month = datetime.getMonth() + 1 < 10 ? "0" + (datetime.getMonth() + 1) : datetime.getMonth() + 1;
+    const date = datetime.getDate() < 10 ? "0" + datetime.getDate() : datetime.getDate();
+    const hour = datetime.getHours()< 10 ? "0" + datetime.getHours() : datetime.getHours();
+    const minute = datetime.getMinutes()< 10 ? "0" + datetime.getMinutes() : datetime.getMinutes();
+    const second = datetime.getSeconds()< 10 ? "0" + datetime.getSeconds() : datetime.getSeconds();
+    return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
+  }
+</script>
 </body>
 </html>
