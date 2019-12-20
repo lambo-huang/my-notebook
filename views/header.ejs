@@ -3,15 +3,18 @@
 <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/plugins/layui/layui.css'>
+    <link rel='stylesheet' href='/plugins/layui/css/layui.css'>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src='/plugins/jquery.min.js' charset="utf-8"></script>
     <script src='/plugins/layui/layui.all.js' charset="utf-8"></script>
 </head>
 <body>
-<ul class="layui-nav">
+<ul class="layui-nav" lay-filter="demo">
     <li class="layui-nav-item"><a href="/">主页</a></li>
-    <li class="layui-nav-item layui-this"><a href="add">新增 / 编辑记录</a></li>
+    <li class="layui-nav-item"><a href="add">新增 / 编辑记录</a></li>
 </ul>
+
+
 
 <script>
   layui.use('element', function(){

@@ -13,18 +13,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/add', (req, res, next) => {
-  const { id } = req.query;
-
-  fs.readFile('./data/db.json', (err, data) => {
-    const list = JSON.parse(data.toString());
-    const { title, content } = list.map(item => item.id === id);
-    res.render('add', {
-      id,
-      title,
-      content
-    });
+  res.render('add', {
+    title: "新增"
   });
-
 });
 
 router.get('/getList', (req, res, next) => {
@@ -48,6 +39,18 @@ router.get('/getList', (req, res, next) => {
   });
 });
 
+router.get('/getItemInfo', (req, res, next) => {
+  const { id } = req.query;
+  fs.readFile('./data/db.json', (err, data) => {
+    const list = JSON.parse(data.toString());
+    const [{ title, content }] = list.filter(item => item.id === id);
+    res.json({
+      title,
+      content
+    });
+  });
+});
+
 let writeDB = (res, list) => {
   fs.writeFile('./data/db.json', JSON.stringify(list), err => {
     if (err) {
@@ -68,15 +71,26 @@ router.post('/addInfo', (req, res, next) => {
       return console.error(err);
     } else {
       let list = JSON.parse(data.toString());
-      let { title, content, createTime } = req.body;
-      const param = {
-        "id": UUID.generate(),
-        title,
-        content,
-        createTime
-      };
+      let {id,  title, content, createTime } = req.body;
+      if (!id) {
+        // 新增
+        const param = {
+          id: UUID.generate(),
+          title,
+          content,
+          createTime
+        };
+        list.push(param);
+      } else {
+        // 编辑
+        list.forEach(item => {
+          if (item.id === id) {
+            item.title = title;
+            item.content = content;
+          }
+        });
+      }
 
-      list.push(param);
       writeDB(res, list);
     }
 
@@ -84,17 +98,21 @@ router.post('/addInfo', (req, res, next) => {
 });
 
 router.get('/deleteInfo', (req, res, next) => {
-  const { id } = req.query;
+  let { id } = req.query;
+
+  let ids = JSON.parse(id);
 
   fs.readFile('./data/db.json', (err, data) => {
     let list = JSON.parse(data.toString());
 
     list.forEach((item, index) => {
-      if (item.id === id) {
-        list.splice(index, 1);
-        writeDB(res, list);
-      }
-    })
+      ids.forEach(that => {
+        if (item.id === that) {
+          list.splice(index, 1);
+        }
+      })
+    });
+    writeDB(res, list);
   })
 });
 

@@ -6,7 +6,6 @@
 <body>
 <%- include header %>
 <div class="main">
-    <input type="hidden" value="<% id %>">
     <div class="layui-form">
         <div class="layui-form-item">
             <label class="layui-form-label">标题</label>
@@ -23,7 +22,7 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">文本域</label>
+            <label class="layui-form-label">内容</label>
             <div class="layui-input-block">
               <textarea
                       id="content"
@@ -44,23 +43,39 @@
 </div>
 
 <script>
+  const id = location.search.split("=")[1];
+
+  if (id) {
+    getItemInfo(id);
+  }
+
+  function getItemInfo(id) {
+    $.get(`/getItemInfo?id=${id}`, res => {
+      $("#title").val(res.title);
+      $("#content").val(res.content)
+    })
+  }
+
   $("#add").click(function () {
     const param = {
       title: $("#title").val(),
       content: $("#content").val(),
       createTime: getTime()
     };
+    if (id) {
+      param.id = id;
+    }
+
     $.post("/addInfo", param, function (res) {
       if (!res.code) {
-        layer.msg('新增成功。');
+        layer.msg('操作成功。', {icon: 1});
         $("#title").val('');
         $("#content").val('')
       } else {
-        layer.msg('新增失败。');
+        layer.msg('操作失败。', {icon: 2});
       }
     })
   })
-
 
   function getTime(){
     const datetime = new Date();
